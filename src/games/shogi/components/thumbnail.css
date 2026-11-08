@@ -1,0 +1,7 @@
+.board-thumbnail { display: grid; place-items: center; width: 100%; aspect-ratio: 16 / 11; pointer-events: none; }
+.board-thumbnail-crop { position: relative; width: 68.75%; aspect-ratio: 1; overflow: hidden; border-radius: 3px; container-type: inline-size; }
+/* 1.35% board margin + four of nine inner cells = 44.5944% of the board. */
+.board-thumbnail .board { position: absolute; left: 0; bottom: 0; width: 224.243%; height: 224.243%; --board-size: 540px; }
+@supports (width: 1cqw) {
+  .board-thumbnail .board { --board-size: 224.243cqw; }
+}

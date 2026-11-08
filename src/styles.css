@@ -1,0 +1,69 @@
+@font-face {
+  font-family: "Noto Sans JP";
+  src: url('./assets/fonts/noto-sans-jp-ui.woff') format('woff');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+* { box-sizing: border-box; }
+:root {
+  font-family: "Noto Sans JP", system-ui, sans-serif;
+  color: #202020; background: #fff; font-synthesis: none;
+  --canvas: #fff; --surface: #fff; --surface-hover: #f0f0f0; --raised: #e5e5e5;
+  --ink: #202020; --secondary: #535353; --muted: #686868; --line: #d4d4d4;
+  --ease: cubic-bezier(.22, 1, .36, 1);
+}
+body { margin: 0; min-width: 320px; background: var(--canvas); }
+button, input { font: inherit; }
+button, a, input { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button { color: inherit; cursor: pointer; }
+button:disabled { cursor: default; }
+a { color: inherit; text-decoration: none; }
+button, a { transition: color 140ms var(--ease), background-color 140ms var(--ease), border-color 140ms var(--ease); }
+:focus-visible { outline: 2px solid #111; outline-offset: 4px; }
+button:disabled { color: #888; }
+.loading, .not-found { display: grid; place-content: center; gap: 24px; min-height: 100svh; }
+.not-found h1 { font-weight: 500; font-size: 24px; }
+.not-found a { text-decoration: underline; }
+.portal { max-width: 1200px; margin: 0 auto; padding: 0 40px 64px; }
+.portal-header { height: 96px; display: flex; align-items: center; border-bottom: 1px solid var(--line); margin-bottom: 56px; }
+.wordmark { font-family: inherit; font-size: 24px; letter-spacing: -.02em; }
+.portal h1 { margin: 0 0 32px; font-size: 28px; font-weight: 500; }
+.game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 352px)); gap: 24px; }
+.game-card { display: block; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: 0 1px 2px #00000005; }
+.game-card:hover { border-color: #aaa; }
+.game-thumbnail { aspect-ratio: 16 / 11; border-bottom: 1px solid var(--line); overflow: hidden; }
+.game-thumbnail img { display: block; height: 100%; width: 100%; object-fit: cover; }
+.game-card-content { padding: 24px; }
+.game-card h2 { margin: 0; font-size: 24px; font-weight: 500; display: flex; justify-content: space-between; }
+.game-card h2 span { font-family: inherit; font-size: 20px; font-weight: 400; }
+.game-card p { margin: 12px 0 24px; font-size: 14px; color: var(--secondary); }
+.game-meta { display: flex; gap: 16px; color: var(--muted); font-size: 12px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.modal {
+  border: 1px solid var(--line); border-radius: 12px; width: min(440px, calc(100vw - 32px));
+  padding: 24px; background: var(--surface); color: var(--ink); max-height: calc(100svh - 32px);
+  box-shadow: 0 2px 8px #00000008, 0 16px 40px #00000014; overscroll-behavior: contain;
+}
+.modal::backdrop { background: #00000026; }
+.modal-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px; }
+.modal h2 { margin: 0; font-size: 20px; font-weight: 500; }
+.modal p { font-size: 14px; line-height: 1.9; color: var(--secondary); }
+.close-button { display: grid; place-items: center; background: transparent; border: 0; border-radius: 8px; font-size: 28px; min-width: 44px; height: 44px; margin: -8px -8px -8px 0; }
+.close-button:hover { background: var(--surface-hover); }
+.dialog-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.dialog-actions button { min-height: 48px; padding: 8px 20px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-hover); font-size: 14px; }
+.dialog-actions button:hover { border-color: #111; }
+.dialog-actions .primary { background: #111; border-color: #111; color: #fff; }
+.dialog-actions .primary:hover { background: #333; }
+.dialog-actions button:disabled { background: var(--surface-hover); border-color: var(--line); color: #888; }
+@media (max-width: 640px) {
+  .portal { padding: 0 24px 40px; }
+  .portal-header { height: 80px; margin-bottom: 40px; }
+  .game-grid { grid-template-columns: minmax(0, 1fr); }
+  .modal { padding: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; animation: none !important; scroll-behavior: auto !important; }
+}
