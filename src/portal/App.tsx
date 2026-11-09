@@ -6,7 +6,7 @@ import { APP_NAME, toolPath } from '../config';
 function Portal() {
   return <main className="portal">
     <header className="portal-header"><span className="wordmark">{APP_NAME}</span></header>
-    <h1>一覧</h1>
+    <h1>便利ツール一覧</h1>
     <div className="game-grid">{games.map(game => {
       const Thumbnail = game.thumbnail;
       return <Link className="game-card" key={game.id} to={toolPath(game.id)}>
