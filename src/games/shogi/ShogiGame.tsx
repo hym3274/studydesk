@@ -5,7 +5,7 @@ import { Modal } from '../../components/Modal';
 import { agreeImpasse, canAgreeImpasse, impassePoints, makeMove, newGame, pieceLabel, playerName, resign, undoMove } from './engine/game';
 import { getLegalMoves, isInCheck } from './engine/rules';
 import { other, type Game, type HandKind, type Move, type Result } from './engine/types';
-import { browserStorage, loadSession, saveSession, serializeSession, type Preferences } from './persistence';
+import { browserStorage, loadSession, saveSession, serializeSession, type Preferences, type StoredSession } from './persistence';
 import { Board } from './components/Board';
 import { HandStand } from './components/HandStand';
 import { Piece } from './components/Piece';
@@ -18,9 +18,9 @@ const resultText: Record<Result['reason'], string> = {
   repetition: '千日手・指し直し', impasse: '持将棋・指し直し', 'impasse-points': '持将棋・24点未満', 'move-limit': '500手・指し直し',
 };
 
-export default function ShogiGame() {
+export default function ShogiGame({ initialSession }: { initialSession?: StoredSession }) {
   const [loaded] = useState(() => loadSession(browserStorage()));
-  const [game, setGame] = useState(loaded.game), [preferences, setPreferences] = useState<Preferences>(loaded.preferences);
+  const [game, setGame] = useState(initialSession?.game ?? loaded.game), [preferences, setPreferences] = useState<Preferences>(initialSession?.preferences ?? loaded.preferences);
   const [selection, setSelection] = useState<Selection>(null), [panel, setPanel] = useState<Panel>(null);
   const [promotion, setPromotion] = useState<Move[] | null>(null), [hideResult, setHideResult] = useState(false);
   const [notice, setNotice] = useState(loaded.status === 'invalid' ? '保存データを読み込めなかったため、新しい対局を表示しています' : '');
