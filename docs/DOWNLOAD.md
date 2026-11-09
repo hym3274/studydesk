@@ -22,3 +22,7 @@ Noto Sans JPのライセンスはHTML末尾に同梱しています。
 GitHubのActionsで **Publish downloadable HTML → Run workflow** を実行すると、
 テストと単体版のビルドが成功した場合に、新しいReleaseと `desk.html` を公開します。
 通常のpushではダウンロード版を更新しません。
+
+現在の版は **1.0.2** です。今後は `package.json` のversionを更新してから公開し、
+Release名・タグを `Desk v1.0.3`・`v1.0.3` の形式にします。同じ版を再公開すると重複タグで失敗するため、変更ごとに版を進めます。
+1.0.2の既存タグは、ダウンロードリンクを維持するため `download-2` のままです。

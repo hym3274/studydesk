@@ -18,14 +18,17 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build:standalone
+      - name: Read version
+        id: version
+        run: node -p "'value=' + JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version" >> "$GITHUB_OUTPUT"
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          RELEASE_TAG: download-${{ github.run_number }}
+          RELEASE_TAG: v${{ steps.version.outputs.value }}
           RELEASE_COMMIT: ${{ github.sha }}
         run: >-
           gh release create "$RELEASE_TAG" downloads/desk.html
           --target "$RELEASE_COMMIT"
-          --title "Desk ダウンロード版 $RELEASE_TAG"
+          --title "Desk $RELEASE_TAG"
           --notes-file docs/DOWNLOAD.md
