@@ -13,9 +13,6 @@ const theme = defineTheme({
   tokens: {
     '--font-family-body': '"Noto Sans JP", system-ui, sans-serif',
     '--font-family-heading': '"Noto Sans JP", system-ui, sans-serif',
-    '--color-background-body': '#ffffff',
-    '--color-background-surface': '#ffffff',
-    '--color-accent': '#111111',
   },
   components: {
     button: { 'size:lg': { minHeight: '48px', fontSize: '16px' } },
