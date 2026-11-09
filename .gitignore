@@ -1,5 +1,7 @@
 node_modules/
 dist/
+dist-standalone/
+downloads/
 coverage/
 *.local
 test-results/

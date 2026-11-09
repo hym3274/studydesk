@@ -1,0 +1,31 @@
+name: Publish downloadable HTML
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: download-release
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build:standalone
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: download-${{ github.run_number }}
+          RELEASE_COMMIT: ${{ github.sha }}
+        run: >-
+          gh release create "$RELEASE_TAG" downloads/desk.html
+          --target "$RELEASE_COMMIT"
+          --title "Desk ダウンロード版 $RELEASE_TAG"
+          --notes-file docs/DOWNLOAD.md
