@@ -2,23 +2,32 @@ import { Suspense } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import { games } from './registry';
 import { APP_NAME, toolPath } from '../config';
+import { Card } from '@astryxdesign/core/Card';
+import { Heading } from '@astryxdesign/core/Heading';
+import { Text } from '@astryxdesign/core/Text';
+import { VStack } from '@astryxdesign/core/VStack';
+import { HStack } from '@astryxdesign/core/HStack';
+import { ExperimentUI } from '../ui/ExperimentUI';
 
 function Portal() {
-  return <main className="portal">
-    <header className="portal-header"><span className="wordmark">{APP_NAME}</span></header>
-    <h1>便利ツール一覧</h1>
-    <div className="game-grid">{games.map(game => {
+  return <ExperimentUI><main className="experiment-portal">
+    <header className="experiment-header"><Text weight="medium">{APP_NAME}</Text></header>
+    <VStack gap={8}>
+    <Heading level={1}>便利ツール一覧</Heading>
+    <VStack className="experiment-catalog" gap={6}>{games.map(game => {
       const Thumbnail = game.thumbnail;
-      return <Link className="game-card" key={game.id} to={toolPath(game.id)}>
-      <div className="game-thumbnail">{typeof Thumbnail === 'string'
+      return <Link key={game.id} to={toolPath(game.id)} className="experiment-tool-link"><Card className="experiment-tool" padding={0}>
+      <VStack className="experiment-thumbnail">{typeof Thumbnail === 'string'
         ? <img src={Thumbnail} alt={game.thumbnailAlt} width="640" height="440" />
-        : <Thumbnail label={game.thumbnailAlt} />}</div>
-      <div className="game-card-content"><h2>{game.name}<span aria-hidden="true">↗</span></h2>
-        <p>{game.description}</p><div className="game-meta"><span>{game.genre}</span><span>{game.players}</span></div>
-      </div>
-    </Link>;
-    })}</div>
-  </main>;
+        : <Thumbnail label={game.thumbnailAlt} />}</VStack>
+      <VStack padding={6} gap={3}>
+        <Heading level={2}>{game.name}</Heading>
+        <Text type="supporting">{game.description}</Text>
+        <HStack gap={4}><Text type="supporting">{game.genre}</Text><Text type="supporting">{game.players}</Text></HStack>
+      </VStack>
+    </Card></Link>;
+    })}</VStack></VStack>
+  </main></ExperimentUI>;
 }
 
 export default function App() {

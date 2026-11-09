@@ -1,0 +1,3 @@
+/* Offline replacement for Astryx Neutral's CDN font loader.
+ * Noto Sans JP is already loaded once by src/styles.css; ExperimentUI selects
+ * that family explicitly. Do not embed it twice in the standalone HTML. */

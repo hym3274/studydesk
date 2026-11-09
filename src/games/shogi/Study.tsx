@@ -1,5 +1,11 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Button } from '@astryxdesign/core/Button';
+import { Heading } from '@astryxdesign/core/Heading';
+import { HStack } from '@astryxdesign/core/HStack';
+import { VStack } from '@astryxdesign/core/VStack';
+import { Text } from '@astryxdesign/core/Text';
+import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
+import { ExperimentUI } from '../../ui/ExperimentUI';
 import { Board } from './components/Board';
 import { HandStand } from './components/HandStand';
 import { Modal } from '../../components/Modal';
@@ -11,15 +17,16 @@ import './shogi.css';
 import './study.css';
 
 export default function Study({ mode }: { mode: 'puzzles' | 'lessons' }) {
-  return <main className="shogi-app study-page"><header className="study-header">
-    <Link to="/tools/01" className="study-back" aria-label="将棋のメニューへ">←</Link>
-    <h1>{mode === 'puzzles' ? '詰将棋' : '戦法解説'}</h1>
-  </header>{mode === 'lessons' ? <p className="study-pending">準備中</p> : <PuzzleCollection />}</main>;
+  return <ExperimentUI><main className="shogi-app study-page experiment-study"><header className="experiment-study-header">
+    <Button href="/tools/01" label="将棋へ" variant="ghost" />
+    <Heading level={1}>{mode === 'puzzles' ? '詰将棋' : '戦法解説'}</Heading>
+  </header>{mode === 'lessons' ? <VStack className="experiment-pending" hAlign="center"><Text type="supporting">準備中</Text></VStack> : <PuzzleCollection />}</main></ExperimentUI>;
 }
 function PuzzleCollection() {
   const [index, setIndex] = useState(0);
-  return <><nav className="study-tabs" aria-label="問題を選択">{puzzles.map((p,i) => <button key={p.name}
-    aria-current={index === i ? 'page' : undefined} onClick={() => setIndex(i)}>{p.name}</button>)}</nav>
+  return <><HStack className="experiment-problems" hAlign="center"><SegmentedControl label="問題を選択" size="lg" value={String(index)} onChange={value => setIndex(Number(value))}>
+    {puzzles.map((p,i) => <SegmentedControlItem key={p.name} value={String(i)} label={p.name} />)}
+    </SegmentedControl></HStack>
     <Puzzle key={index} index={index} /></>;
 }
 function Puzzle({ index }: { index: number }) {
@@ -52,16 +59,16 @@ function Puzzle({ index }: { index: number }) {
   }
   function reset() { setPosition(puzzle.position); setSolved(false); setMessage('１手詰'); setLast(undefined); cancel(); }
   return <>
-    <div className="study-feedback" role="status">{message}</div>
-    <div className="play-space study-play-space">
+    <HStack hAlign="center" className="study-feedback"><Text role="status">{message}</Text></HStack>
+    <VStack className="play-space study-play-space">
       <Board position={position} flipped={false} selected={selected} destinations={new Set(choices.map(m => m.to))}
         lastMove={last} checkedKing={solved ? position.board.findIndex(p => p?.kind === 'K' && p.color === 'gote') : null}
         onSquare={onSquare} onCancel={cancel} />
       <HandStand position={position} color="sente" top={false} faceToFace={false} selected={hand}
         onSelect={kind => {setSelected(null);setHand(hand === kind ? null : kind);}} ended={solved} />
-    </div>
-    <div className="study-controls"><button onClick={() => setMessage(puzzle.hint)}>ヒント</button><button onClick={reset}>やり直す</button></div>
-    {solved && <p className="study-explanation">{puzzle.explanation}</p>}
+    </VStack>
+    <HStack className="experiment-controls" hAlign="center" gap={3}><Button label="ヒント" onClick={() => setMessage(puzzle.hint)} variant="primary" size="lg" /><Button label="やり直す" onClick={reset} size="lg" /></HStack>
+    {solved && <Text as="p" className="study-explanation">{puzzle.explanation}</Text>}
     <details className="study-rules"><summary>ルール</summary><p>先手で王手をかけ、１手で詰ませてください。玉方の持ち駒は盤上と攻め方の持ち駒を除く残り全部です。二歩・打ち歩詰めなどの禁手は選べません。自玉は盤面の右下に置いています。</p></details>
     {promotion.length > 0 && <Modal title="成りますか" onClose={() => setPromotion([])}><div className="promotion-choices">
       {promotion.map(m => m.type === 'move' && <button key={String(m.promote)} onClick={() => attempt(m)}>
