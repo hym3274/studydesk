@@ -16,5 +16,5 @@ export const games: readonly GameRegistration[] = [{
   id: '01', name: '将棋', description: '相手を追い詰めると勝ちのボードゲーム',
   genre: 'ボードゲーム', players: '2人', thumbnail: BoardThumbnail,
   thumbnailAlt: '先手陣の左下4×4マスを拡大した矢倉囲い',
-  component: lazy(() => import('../games/shogi/ShogiGame')),
+  component: lazy(() => import('../games/shogi/ShogiHome')),
 }];

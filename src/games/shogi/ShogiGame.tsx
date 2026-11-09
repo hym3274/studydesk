@@ -102,7 +102,7 @@ export default function ShogiGame() {
         <button onClick={() => setPanel('restart')}>最初から</button>
         <div className="menu-divider" />
         <button onClick={() => setPanel('help')}>操作とルール</button>
-        <Link to="/">一覧へ</Link>
+        <Link to="/tools/01">将棋のメニューへ</Link>
       </nav>
       <p className="save-status">{saved ? '指すたびに自動保存' : '自動保存を利用できません'}</p>
     </Modal>}

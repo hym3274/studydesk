@@ -25,13 +25,14 @@ const files = await readdir('dist-standalone');
 const css = (await Promise.all(files.filter(name => name.endsWith('.css'))
   .map(name => readFile(`dist-standalone/${name}`, 'utf8')))).join('\n');
 const favicon = await readFile('public/favicon.svg');
-const license = await readFile('public/fonts/OFL-NotoSansJP.txt', 'utf8');
+const license = (await Promise.all(['OFL-NotoSansJP.txt', 'OFL-YujiMai.txt']
+  .map(name => readFile(`public/fonts/${name}`, 'utf8')))).join('\n\n');
 html = html.replace(/<script\b[^>]*src="[^"]+"[^>]*><\/script>/g, '')
   .replace(/<link\b[^>]*rel="stylesheet"[^>]*>/g, '')
   .replace(/href="\.\/favicon.svg"/, `href="data:image/svg+xml;base64,${favicon.toString('base64')}"`)
   .replace('</head>', () => `<style>${css.replace(/<\/style/gi, '<\\/style')}</style>\n</head>`)
   .replace('</body>', () => `<script>${js.replace(/<\/script/gi, '<\\/script')}</script>\n</body>`);
-html += `\n<!-- Bundled Noto Sans JP license\n${license.replace(/-->/g, '-- >')}\n-->\n`;
+html += `\n<!-- Bundled font licenses\n${license.replace(/-->/g, '-- >')}\n-->\n`;
 // Fail if the output could still depend on a companion asset.
 if (/<(?:script|link)\b[^>]*(?:src|href)="(?!data:)[^"]+"/i.test(html)
   || /url\((?!["']?data:)/i.test(css)) throw new Error('Standalone output contains external assets');

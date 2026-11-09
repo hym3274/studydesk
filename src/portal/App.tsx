@@ -25,7 +25,7 @@ export default function App() {
   return <Suspense fallback={<main className="loading" role="status">読み込み中</main>}>
     <Routes>
       <Route path="/" element={<Portal />} />
-      {games.map(({ id, component: Game }) => <Route key={id} path={toolPath(id)} element={<Game />} />)}
+      {games.map(({ id, component: Game }) => <Route key={id} path={`${toolPath(id)}/*`} element={<Game />} />)}
       <Route path="*" element={<main className="not-found"><h1>ページが見つかりません</h1><Link to="/">一覧へ</Link></main>} />
     </Routes>
   </Suspense>;
