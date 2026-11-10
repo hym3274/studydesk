@@ -9,6 +9,7 @@ import { browserStorage, loadSession, saveSession, serializeSession, type Prefer
 import { Board } from './components/Board';
 import { HandStand } from './components/HandStand';
 import { Piece } from './components/Piece';
+import { registerStudySaveGuard } from '../../study-shortcut';
 import './shogi.css';
 
 type Selection = { type: 'board'; square: number } | { type: 'hand'; kind: HandKind } | null;
@@ -35,6 +36,10 @@ export default function ShogiGame({ initialSession }: { initialSession?: StoredS
     lastSerialized.current = serialized;
     setSaved(saveSession(browserStorage(), { game, preferences }));
   }, [game, preferences]);
+  useEffect(() => registerStudySaveGuard(window,
+    () => saveSession(browserStorage(), { game, preferences }),
+    () => { setSaved(false); setNotice('対局を保存できないため、検索画面への移動を中止しました'); },
+  ), [game, preferences]);
 
   const legalMoves = useMemo(() => game.result ? [] : getLegalMoves(game.position), [game.position, game.result]);
   const selectedMoves = useMemo(() => legalMoves.filter(m => selection?.type === 'board'
