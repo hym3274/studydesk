@@ -24,7 +24,7 @@ export function Board({ position, flipped = false, legal = [], last, onMove, dec
     {squares.map(s => {
       const cell = position.board[s], available = legal.includes(s);
       const className = `rv-square${last === s ? ' rv-last' : ''}`;
-      const content = cell ? <Disc color={cell} /> : available ? <i className="rv-legal" aria-hidden="true" /> : null;
+      const content = cell ? <Disc color={cell} /> : available ? <i className={`rv-legal rv-${position.turn}`} aria-hidden="true" /> : null;
       return decorative ? <i key={s} className={className}>{content}</i> : <button key={s} className={className} data-cell={s}
         aria-label={`${'ABCDEFGH'[s%8]}${Math.floor(s/8)+1} ${cell ? colorName(cell) : '空きマス'}${available ? ' 置けます' : ''}`}
         aria-disabled={!available} tabIndex={focused === s ? 0 : -1} onFocus={() => setFocused(s)}

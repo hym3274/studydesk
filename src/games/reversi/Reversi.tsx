@@ -73,8 +73,8 @@ function Match({initial}: {initial?: Session}) {
     <VStack className="rv-play">
       {(['top','bottom'] as const).map(side => {
         const color: Color = side === 'top' ? top : top === 'white' ? 'black' : 'white';
-        return <HStack key={side} gap={3} className={`rv-player rv-player-${side}${side === 'top' && preferences.faceToFace ? ' rv-facing' : ''}`} aria-label={`${colorName(color)} ${counts[color]}枚`}>
-          <Disc color={color} /><Text>{colorName(color)}</Text><Text hasTabularNumbers>{counts[color]}</Text>
+        return <HStack key={side} gap={3} className={`rv-player rv-player-${side}${side === 'top' && preferences.faceToFace ? ' rv-facing' : ''}`} aria-label={colorName(color)}>
+          <Disc color={color} /><Text>{colorName(color)}</Text>
         </HStack>;
       })}
       <Board position={game.position} legal={moves} flipped={preferences.flipped} last={game.moves.at(-1)} onMove={move} />
