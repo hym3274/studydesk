@@ -92,7 +92,6 @@ function Match({initial}: {initial?: Session}) {
         <Button label="最初から" onClick={() => setPanel('restart')} size="lg" />
         <Button label="操作とルール" onClick={() => setPanel('rules')} size="lg" />
         <Button href="/tools/02" label="オセロのメニューへ" size="lg" />
-        <Text type="supporting">{saved ? '置くたびに自動保存' : '自動保存を利用できません'}</Text>
         <VStack hAlign="end"><CheckboxInput width="fit-content" label="対面モード" value={preferences.faceToFace} onChange={checked => setPreferences(p => ({...p,faceToFace:checked}))} /></VStack>
       </VStack> : panel === 'restart' ? <VStack gap={5}><Text>現在の対局を新しい対局に置き換えます</Text><HStack gap={3}><Button label="戻る" onClick={() => setPanel('menu')} /><Button label="はじめから始める" variant="primary" onClick={restart} /></HStack></VStack>
         : <VStack gap={4}><Text>黒が先手です。点のあるマスをタップすると、縦・横・斜めにはさんだ相手の石がすべて裏返ります</Text>

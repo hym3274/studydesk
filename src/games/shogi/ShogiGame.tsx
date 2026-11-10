@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@astryxdesign/core/Button';
 import { CheckboxInput } from '@astryxdesign/core/CheckboxInput';
 import { VStack } from '@astryxdesign/core/VStack';
-import { Text } from '@astryxdesign/core/Text';
 import { ExperimentUI } from '../../ui/ExperimentUI';
 import { APP_NAME } from '../../config';
 import { Modal } from '../../components/Modal';
@@ -102,14 +101,10 @@ export default function ShogiGame({ initialSession }: { initialSession?: StoredS
     {panel === 'menu' && <ExperimentUI overlay><Modal title="将棋" onClose={() => setPanel(null)} className={upsideDown ? 'opponent-modal' : ''}>
       <VStack gap={3}>
         <Button label="待った" onClick={undo} isDisabled={!game.history.length && !game.result} size="lg" />
-        <Button label="盤面を反転" onClick={() => { setPreferences(p => ({...p,flipped:!p.flipped})); clearInteraction(); setPanel(null); }} size="lg" />
-        <Button label="棋譜" onClick={() => setPanel('history')} size="lg" />
         <Button label="投了" onClick={() => setPanel('resign')} isDisabled={!!game.result} size="lg" />
         <Button label="持将棋の合意" onClick={() => {setAgreement({sente:false,gote:false});setPanel('impasse');}} isDisabled={!!game.result || !canAgreeImpasse(game.position)} size="lg" />
         <Button label="最初から" onClick={() => setPanel('restart')} size="lg" />
-        <Button label="操作とルール" onClick={() => setPanel('help')} size="lg" />
-        <Button href="/tools/01" label="将棋のメニューへ" size="lg" />
-        <Text type="supporting">{saved ? '指すたびに自動保存' : '自動保存を利用できません'}</Text>
+        <Button href="/tools/01" label="メニューに戻る" size="lg" />
         <VStack hAlign="end"><CheckboxInput width="fit-content" label="対面モード" value={preferences.faceToFace} onChange={checked => setPreferences(p => ({...p,faceToFace:checked}))} /></VStack>
       </VStack>
     </Modal></ExperimentUI>}
