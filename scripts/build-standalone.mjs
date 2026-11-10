@@ -25,7 +25,7 @@ const files = await readdir('dist-standalone');
 const css = (await Promise.all(files.filter(name => name.endsWith('.css'))
   .map(name => readFile(`dist-standalone/${name}`, 'utf8')))).join('\n');
 const favicon = await readFile('public/favicon.svg');
-const license = (await Promise.all(['OFL-NotoSansJP.txt', 'OFL-YujiMai.txt']
+const license = (await Promise.all(['OFL-NotoSansJP.txt', 'OFL-YujiMai.txt', 'OFL-DelaGothicOne.txt']
   .map(name => readFile(`public/fonts/${name}`, 'utf8')))).join('\n\n');
 html = html.replace(/<script\b[^>]*src="[^"]+"[^>]*><\/script>/g, '')
   .replace(/<link\b[^>]*rel="stylesheet"[^>]*>/g, '')
