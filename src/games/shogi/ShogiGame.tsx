@@ -104,13 +104,13 @@ export default function ShogiGame({ initialSession }: { initialSession?: StoredS
         <Button label="待った" onClick={undo} isDisabled={!game.history.length && !game.result} size="lg" />
         <Button label="盤面を反転" onClick={() => { setPreferences(p => ({...p,flipped:!p.flipped})); clearInteraction(); setPanel(null); }} size="lg" />
         <Button label="棋譜" onClick={() => setPanel('history')} size="lg" />
-        <CheckboxInput label="対面モード" value={preferences.faceToFace} onChange={checked => setPreferences(p => ({...p,faceToFace:checked}))} />
         <Button label="投了" onClick={() => setPanel('resign')} isDisabled={!!game.result} size="lg" />
         <Button label="持将棋の合意" onClick={() => {setAgreement({sente:false,gote:false});setPanel('impasse');}} isDisabled={!!game.result || !canAgreeImpasse(game.position)} size="lg" />
         <Button label="最初から" onClick={() => setPanel('restart')} size="lg" />
         <Button label="操作とルール" onClick={() => setPanel('help')} size="lg" />
         <Button href="/tools/01" label="将棋のメニューへ" size="lg" />
         <Text type="supporting">{saved ? '指すたびに自動保存' : '自動保存を利用できません'}</Text>
+        <VStack hAlign="end"><CheckboxInput width="fit-content" label="対面モード" value={preferences.faceToFace} onChange={checked => setPreferences(p => ({...p,faceToFace:checked}))} /></VStack>
       </VStack>
     </Modal></ExperimentUI>}
 

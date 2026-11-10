@@ -89,11 +89,11 @@ function Match({initial}: {initial?: Session}) {
       {panel === 'menu' ? <VStack gap={3}>
         <Button label="待った" isDisabled={!game.moves.length} onClick={() => {setGame(undo(game));setHideResult(false);setPanel(null);}} size="lg" />
         <Button label="盤面を反転" onClick={() => {setPreferences(p => ({...p,flipped:!p.flipped}));setPanel(null);}} size="lg" />
-        <CheckboxInput label="対面モード" value={preferences.faceToFace} onChange={checked => setPreferences(p => ({...p,faceToFace:checked}))} />
         <Button label="最初から" onClick={() => setPanel('restart')} size="lg" />
         <Button label="操作とルール" onClick={() => setPanel('rules')} size="lg" />
         <Button href="/tools/02" label="オセロのメニューへ" size="lg" />
         <Text type="supporting">{saved ? '置くたびに自動保存' : '自動保存を利用できません'}</Text>
+        <VStack hAlign="end"><CheckboxInput width="fit-content" label="対面モード" value={preferences.faceToFace} onChange={checked => setPreferences(p => ({...p,faceToFace:checked}))} /></VStack>
       </VStack> : panel === 'restart' ? <VStack gap={5}><Text>現在の対局を新しい対局に置き換えます</Text><HStack gap={3}><Button label="戻る" onClick={() => setPanel('menu')} /><Button label="はじめから始める" variant="primary" onClick={restart} /></HStack></VStack>
         : <VStack gap={4}><Text>黒が先手です。点のあるマスをタップすると、縦・横・斜めにはさんだ相手の石がすべて裏返ります</Text>
           <Text>置ける場所がないときだけ自動でパスします。両者とも置けなくなると終局し、盤上の石が多い側の勝ちです。同数は引き分けです</Text>
