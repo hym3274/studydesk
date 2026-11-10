@@ -4,6 +4,7 @@ import { Button } from '@astryxdesign/core/Button';
 import { VStack } from '@astryxdesign/core/VStack';
 import { HStack } from '@astryxdesign/core/HStack';
 import { Text } from '@astryxdesign/core/Text';
+import { CheckboxInput } from '@astryxdesign/core/CheckboxInput';
 import { ExperimentUI } from '../../ui/ExperimentUI';
 import { Modal } from '../../components/Modal';
 import { registerStudySaveGuard } from '../../study-shortcut';
@@ -88,7 +89,7 @@ function Match({initial}: {initial?: Session}) {
       {panel === 'menu' ? <VStack gap={3}>
         <Button label="待った" isDisabled={!game.moves.length} onClick={() => {setGame(undo(game));setHideResult(false);setPanel(null);}} size="lg" />
         <Button label="盤面を反転" onClick={() => {setPreferences(p => ({...p,flipped:!p.flipped}));setPanel(null);}} size="lg" />
-        <Button label={preferences.faceToFace ? '対面モード：オン' : '対面モード：オフ'} onClick={() => setPreferences(p => ({...p,faceToFace:!p.faceToFace}))} size="lg" />
+        <CheckboxInput label="対面モード" value={preferences.faceToFace} onChange={checked => setPreferences(p => ({...p,faceToFace:checked}))} />
         <Button label="最初から" onClick={() => setPanel('restart')} size="lg" />
         <Button label="操作とルール" onClick={() => setPanel('rules')} size="lg" />
         <Button href="/tools/02" label="オセロのメニューへ" size="lg" />
@@ -96,8 +97,7 @@ function Match({initial}: {initial?: Session}) {
       </VStack> : panel === 'restart' ? <VStack gap={5}><Text>現在の対局を新しい対局に置き換えます</Text><HStack gap={3}><Button label="戻る" onClick={() => setPanel('menu')} /><Button label="はじめから始める" variant="primary" onClick={restart} /></HStack></VStack>
         : <VStack gap={4}><Text>黒が先手です。点のあるマスをタップすると、縦・横・斜めにはさんだ相手の石がすべて裏返ります</Text>
           <Text>置ける場所がないときだけ自動でパスします。両者とも置けなくなると終局し、盤上の石が多い側の勝ちです。同数は引き分けです</Text>
-          <Text>矢印キーでマスを移動し、EnterまたはSpaceで石を置けます。枠は最後に置いた石を示します。対面モードでは向かい側の表示を反転します</Text>
-          <Text>待ったは石を置く前の局面に戻します。CPU・オンライン対戦・対局時計には対応していません</Text></VStack>}
+          <Text>矢印キーでマスを移動し、EnterまたはSpaceで石を置けます。枠は最後に置いた石を示します</Text></VStack>}
     </Modal>}
     {game.position.ended && !hideResult && !panel && <Modal title={result} onClose={() => setHideResult(true)}>
       <VStack gap={5}><Text>黒 {counts.black}枚 ／ 白 {counts.white}枚</Text><Text>両者とも置ける場所がなくなりました</Text>

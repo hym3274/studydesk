@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Button } from '@astryxdesign/core/Button';
+import { CheckboxInput } from '@astryxdesign/core/CheckboxInput';
+import { VStack } from '@astryxdesign/core/VStack';
+import { Text } from '@astryxdesign/core/Text';
+import { ExperimentUI } from '../../ui/ExperimentUI';
 import { APP_NAME } from '../../config';
 import { Modal } from '../../components/Modal';
 import { agreeImpasse, canAgreeImpasse, impassePoints, makeMove, newGame, pieceLabel, playerName, resign, undoMove } from './engine/game';
@@ -95,22 +99,20 @@ export default function ShogiGame({ initialSession }: { initialSession?: StoredS
     </div>
     {game.result && hideResult && <button className="result-reopen" onClick={() => setHideResult(false)}>対局結果</button>}
 
-    {panel === 'menu' && <Modal title="将棋" onClose={() => setPanel(null)} className={`game-menu${upsideDown ? ' opponent-modal' : ''}`}>
-      <nav className="menu-actions" aria-label="対局メニュー">
-        <button onClick={undo} disabled={!game.history.length && !game.result}>待った<span>1手戻す</span></button>
-        <button onClick={() => { setPreferences(p => ({...p,flipped:!p.flipped})); clearInteraction(); setPanel(null); }}>盤面を反転</button>
-        <button onClick={() => setPanel('history')}>棋譜</button>
-        <label className="menu-toggle"><span>対面モード</span><input type="checkbox" checked={preferences.faceToFace} onChange={e => setPreferences(p => ({...p,faceToFace:e.target.checked}))} /></label>
-        <div className="menu-divider" />
-        <button onClick={() => setPanel('resign')} disabled={!!game.result}>投了</button>
-        <button onClick={() => {setAgreement({sente:false,gote:false});setPanel('impasse');}} disabled={!!game.result || !canAgreeImpasse(game.position)}>持将棋の合意</button>
-        <button onClick={() => setPanel('restart')}>最初から</button>
-        <div className="menu-divider" />
-        <button onClick={() => setPanel('help')}>操作とルール</button>
-        <Link to="/tools/01">将棋のメニューへ</Link>
-      </nav>
-      <p className="save-status">{saved ? '指すたびに自動保存' : '自動保存を利用できません'}</p>
-    </Modal>}
+    {panel === 'menu' && <ExperimentUI overlay><Modal title="将棋" onClose={() => setPanel(null)} className={upsideDown ? 'opponent-modal' : ''}>
+      <VStack gap={3}>
+        <Button label="待った" onClick={undo} isDisabled={!game.history.length && !game.result} size="lg" />
+        <Button label="盤面を反転" onClick={() => { setPreferences(p => ({...p,flipped:!p.flipped})); clearInteraction(); setPanel(null); }} size="lg" />
+        <Button label="棋譜" onClick={() => setPanel('history')} size="lg" />
+        <CheckboxInput label="対面モード" value={preferences.faceToFace} onChange={checked => setPreferences(p => ({...p,faceToFace:checked}))} />
+        <Button label="投了" onClick={() => setPanel('resign')} isDisabled={!!game.result} size="lg" />
+        <Button label="持将棋の合意" onClick={() => {setAgreement({sente:false,gote:false});setPanel('impasse');}} isDisabled={!!game.result || !canAgreeImpasse(game.position)} size="lg" />
+        <Button label="最初から" onClick={() => setPanel('restart')} size="lg" />
+        <Button label="操作とルール" onClick={() => setPanel('help')} size="lg" />
+        <Button href="/tools/01" label="将棋のメニューへ" size="lg" />
+        <Text type="supporting">{saved ? '指すたびに自動保存' : '自動保存を利用できません'}</Text>
+      </VStack>
+    </Modal></ExperimentUI>}
 
     {panel === 'restart' && <Modal title="最初から始めますか" onClose={() => setPanel(null)} className={upsideDown ? 'opponent-modal' : ''}>
       <p>現在の対局と棋譜を消して、初期配置に戻します</p>

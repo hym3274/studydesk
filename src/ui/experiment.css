@@ -1,4 +1,5 @@
 .astryx-ui { min-height: 100svh; background: var(--color-background-body); color: var(--color-text-primary); }
+.astryx-ui.astryx-overlay { min-height: 0; background: transparent; }
 .astryx-ui .experiment-study { background: var(--color-background-body); }
 .astryx-ui .study-rules { color: var(--color-text-secondary); }
 .experiment-portal { width: 100%; max-width: 1120px; margin-inline: auto; padding: 0 var(--spacing-6) var(--spacing-10); }
