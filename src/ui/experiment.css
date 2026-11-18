@@ -11,7 +11,8 @@
 .experiment-thumbnail { aspect-ratio: 16 / 11; overflow: hidden; border-bottom: 1px solid var(--color-border); }
 .experiment-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
 .experiment-home { position: relative; isolation: isolate; overflow: hidden; min-height: 100svh; display: grid; place-items: center; padding: var(--spacing-6); }
-.experiment-backdrop { position: absolute; inset: 0; z-index: -1; display: grid; place-items: center; pointer-events: none; user-select: none; filter: blur(8px); opacity: .28; }
+.experiment-backdrop { position: absolute; inset: 0; z-index: -1; display: grid; place-items: center; pointer-events: none; user-select: none; }
+.experiment-backdrop, .experiment-board-muted { filter: blur(8px); opacity: .28; }
 .experiment-backdrop .experiment-backdrop-board { --board-size: min(720px,76svh,calc(100vw - 96px)); width: min(1120px,100%); margin: 0; transform: scale(1.03); }
 .experiment-back { position: absolute; z-index: 2; top: var(--spacing-6); left: var(--spacing-6); }
 .experiment-home-content { position: relative; width: min(100%,320px); padding-block: var(--spacing-10); }

@@ -21,6 +21,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+        env:
+          VITE_ROOMS_URL: ${{ vars.VITE_ROOMS_URL }}
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request'
         with:

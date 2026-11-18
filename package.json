@@ -11,6 +11,9 @@
     "build": "npm run typecheck && vite build && npm run check:public",
     "check:public": "node scripts/check-public-output.mjs",
     "build:standalone": "npm run typecheck && node scripts/build-standalone.mjs",
+    "build:rooms": "node scripts/build-rooms.mjs",
+    "build:rooms:public": "npm run typecheck && node scripts/build-public-rooms.mjs",
+    "start:rooms": "node dist-rooms/server.js",
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {

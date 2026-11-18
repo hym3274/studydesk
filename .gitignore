@@ -1,6 +1,7 @@
 node_modules/
 dist/
 dist-standalone/
+dist-rooms/
 downloads/
 coverage/
 *.local

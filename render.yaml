@@ -1,0 +1,17 @@
+services:
+  - type: web
+    runtime: node
+    name: desk-rooms
+    plan: free
+    buildCommand: npm ci && npm run build:rooms:public
+    startCommand: npm run start:rooms
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.20.0
+      - key: ROOMS_HOST
+        value: 0.0.0.0
+      - key: ROOMS_DOWNLOAD_HTML
+        value: downloads/desk.html
+      - key: SKIP_INSTALL_DEPS
+        value: "true"

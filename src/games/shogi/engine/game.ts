@@ -58,9 +58,9 @@ export function undoMove(game: Game): Game {
   return last ? { position: last.before, history: game.history.slice(0, -1), result: null } : game;
 }
 
-export function resign(game: Game): Game {
+export function resign(game: Game, color: Color = game.position.turn): Game {
   if (game.result) throw new Error('対局は終了しています');
-  return { ...game, result: { reason: 'resign', winner: other(game.position.turn) } };
+  return { ...game, result: { reason: 'resign', winner: other(color) } };
 }
 
 export function impassePoints(position: Position, color: Color): number {

@@ -13,7 +13,7 @@ export interface LoadedSession extends StoredSession { status: LoadStatus }
 function isObject(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
-function parseMove(value: unknown): Move {
+export function parseMove(value: unknown): Move {
   if (!isObject(value) || !Number.isInteger(value.to) || Number(value.to) < 0 || Number(value.to) > 80) throw new Error('不正な指し手');
   if (value.type === 'drop' && HAND_KINDS.includes(value.kind as HandKind)) return { type: 'drop', kind: value.kind as HandKind, to: value.to as number };
   if (value.type === 'move' && Number.isInteger(value.from) && Number(value.from) >= 0 && Number(value.from) <= 80 && typeof value.promote === 'boolean') {

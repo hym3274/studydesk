@@ -15,6 +15,7 @@ import './shogi.css';
 import './study.css';
 const Match = lazy(() => import('./ShogiGame'));
 const Study = lazy(() => import('./Study'));
+const Online = lazy(() => import('./online/OnlineShogi'));
 const noDestinations = new Set<number>();
 const ignoreBackdropInput = () => {};
 function BoardBackdrop({ state }: { state: ReturnType<typeof loadHomeState> }) {
@@ -34,6 +35,7 @@ export default function ShogiHome() {
   return <Suspense fallback={<main className="loading">読み込み中</main>}><Routes>
     <Route index element={<HomeMenu onResume={() => setInitialSession(undefined)} onNew={setInitialSession} />} />
     <Route path="match" element={<Match initialSession={initialSession} />} />
+    <Route path="online" element={<Online />} />
     <Route path="puzzles" element={<Study mode="puzzles" />} />
     <Route path="lessons" element={<Study mode="lessons" />} />
     <Route path="*" element={<main className="not-found"><Link to="/tools/01">将棋へ</Link></main>} />
@@ -54,6 +56,7 @@ function HomeMenu({ onResume, onNew }: { onResume: () => void; onNew: (session: 
         <h1 className="experiment-title">将棋</h1><nav aria-label="将棋のメニュー"><VStack gap={3}>
           <Button href="/tools/01/match" onClick={state.canResume ? onResume : () => onNew({ game: newGame(), preferences: state.session.preferences })} label={state.canResume ? '対人対戦 / 続きから' : '対人対戦'} variant="primary" size="lg" width="100%" />
           {state.canResume && <Button onClick={() => setConfirmNew(true)} label="対人対戦 / はじめから" variant="secondary" size="lg" width="100%" />}
+          <Button href="/tools/01/online" label="通信対戦" variant="secondary" size="lg" width="100%" />
           <Button href="/tools/01/puzzles" label="詰将棋" variant="secondary" size="lg" width="100%" />
           <Button href="/tools/01/lessons" label="戦法解説" variant="secondary" size="lg" width="100%" />
         </VStack></nav>

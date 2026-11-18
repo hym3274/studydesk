@@ -1,0 +1,24 @@
+.online-shogi { position: relative; min-height: 100svh; isolation: isolate; }
+.online-board { transition: filter 500ms ease, opacity 500ms ease; }
+.online-board > .shogi-app { width: 100%; }
+.online-lobby {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--spacing-5, 1.25rem);
+  transition: opacity 500ms ease;
+}
+.online-lobby.is-revealing { opacity: 0; pointer-events: none; }
+.online-lobby-wrap { width: min(calc(100vw - 2.5rem), 24rem); }
+.online-lobby-card { background: var(--color-background-surface); }
+.online-back { align-self: flex-start; }
+.online-code { margin: 0; font-size: var(--font-size-3xl, 2rem); letter-spacing: .22em; font-variant-numeric: tabular-nums; user-select: all; }
+.online-player-order { text-align: center; }
+.online-message { margin: 0; font-size: var(--font-size-sm, .875rem); color: var(--color-text-secondary); text-align: center; }
+.online-lobby .online-ready-confirmed { background: var(--color-success); border-color: var(--color-success); color: var(--color-background-surface); }
+.online-lobby .online-ready-confirmed:hover:not(:disabled) { background: color-mix(in srgb, var(--color-success) 88%, var(--color-text-primary)); }
+.online-notice, .online-proposal { margin: 0.75rem auto 1rem; }
+.online-proposal { width: min(100%, 24rem); text-align: center; }
+.online-proposal p { margin: 0 0 .5rem; }
+@media (prefers-reduced-motion: reduce) { .online-board, .online-lobby { transition: none; } }

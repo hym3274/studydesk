@@ -18,6 +18,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build:standalone
+        env:
+          VITE_ROOMS_URL: ${{ vars.VITE_ROOMS_URL }}
       - name: Read version
         id: version
         run: node -p "'value=' + JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version" >> "$GITHUB_OUTPUT"
