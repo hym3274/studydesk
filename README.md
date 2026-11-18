@@ -160,6 +160,8 @@ Noto Sans JPは、現在の画面の文字とASCII・仮名・全半角文字を
 
 Renderに置く場合は、`render.yaml` が入ったブランチをBlueprintとして接続します。公開用ビルドはサービスのHTTPS URLを単体HTMLに埋め込みます。公開後は、両者が同じサービスの `/desk.html` からファイルをダウンロードして、将棋の「通信対戦」で部屋コードを共有します。久しぶりに接続するときはサーバーの起動に時間がかかる場合があります。
 
+このリポジトリのGitHub Pagesは標準で `https://desk-rooms.onrender.com` につなぎます。公開サーバーでは `https://hym3274.github.io` を許可しているため、Web版と単体HTML版は同じ部屋に参加できます。
+
 他のホスティング先でサーバーからHTMLも配布するには、ビルド時に `VITE_ROOMS_URL` を設定して `npm run build:rooms:public` を実行し、起動時に `ROOMS_DOWNLOAD_HTML=downloads/desk.html` を設定します。
 
 部屋はサーバーのメモリに保管され、サーバーの再起動または30分間アクセスがない場合に消えます。サーバーは1インスタンスで運用してください。再接続用の情報はブラウザのタブに保存されます。

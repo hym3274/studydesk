@@ -62,7 +62,7 @@ export default function OnlineShogi() {
       <ShogiGame online={{
         game: room?.game ?? initialGame, color: room?.color ?? previewColor,
         active: active && !!room?.opponentOnline, connected, busy, proposal: room?.proposal ?? null,
-        status: active ? error || (!connected ? '再接続中…' : !room?.opponentOnline && !room?.game?.result ? '相手の再接続を待っています' : '') : '',
+        status: active ? error || (!connected ? '再接続中…' : !room?.opponentOnline && !room?.game?.result ? '相手の再接続を待ってます' : '') : '',
         send, leave: exit,
       }} />
     </section>
@@ -108,7 +108,7 @@ export default function OnlineShogi() {
                   <Button label={room.ready ? '準備おｋ！' : '準備おｋ？'} variant="primary" size="lg" width="100%"
                     className={room.ready ? 'online-ready-confirmed' : undefined} isDisabled={!canAct}
                     onClick={() => void send({ type: 'ready', ready: !room.ready, orderRevision: room.orderRevision })} />
-                  {(!connected || !room.opponentOnline) && <p className="online-message" role="status">{connected ? '相手の再接続を待っています' : '再接続中…'}</p>}
+                  {(!connected || !room.opponentOnline) && <p className="online-message" role="status">{connected ? '相手の再接続を待ってます' : '再接続中…'}</p>}
                 </>}
                 <Button label="部屋を出る" variant="ghost" isDisabled={busy} onClick={() => void exit()} />
               </>}

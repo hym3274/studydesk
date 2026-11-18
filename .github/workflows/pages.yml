@@ -22,7 +22,7 @@ jobs:
       - run: npm test
       - run: npm run build
         env:
-          VITE_ROOMS_URL: ${{ vars.VITE_ROOMS_URL }}
+          VITE_ROOMS_URL: ${{ vars.VITE_ROOMS_URL || 'https://desk-rooms.onrender.com' }}
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request'
         with:

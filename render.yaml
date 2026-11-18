@@ -11,6 +11,8 @@ services:
         value: 22.20.0
       - key: ROOMS_HOST
         value: 0.0.0.0
+      - key: ROOMS_ORIGINS
+        value: https://hym3274.github.io
       - key: ROOMS_DOWNLOAD_HTML
         value: downloads/desk.html
       - key: SKIP_INSTALL_DEPS
