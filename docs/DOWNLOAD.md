@@ -6,7 +6,7 @@
 - 将棋で盤の外や駒台の空いているところを押すと、駒の選択を解除できます。
 - 戦法解説で棋譜を再生できます。解説エディターでは盤面とコメントを作り、JSONで保存・読み込みできます。
 
-[desk.html をダウンロード](https://desk-rooms.onrender.com/desk.html)し、Chromeなどのブラウザで開いてください。
+GitHub Releasesの **Assets → desk.html**、または [Renderのダウンロード先](https://desk-rooms.onrender.com/desk.html) から `desk.html` を保存し、Chromeなどのブラウザで開いてください。
 同じ端末での対局や解説の編集はオフラインで使えます。通信対戦にはインターネット接続が必要です。
 
 通信対戦では、片方が部屋を作り、もう片方が6桁の部屋コードを入力します。両方が「準備おｋ？」を押すと始まります。
