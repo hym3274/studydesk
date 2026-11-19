@@ -20,6 +20,61 @@
 .study-explanation,.study-rules { max-width: 520px; margin: 24px auto; font-size: 14px; line-height: 1.9; }
 .study-rules { color: var(--secondary); }
 .study-rules summary { cursor: pointer; min-height: 44px; }
+.lesson-catalog { width: min(100%, 72rem); margin: var(--spacing-8) auto 0; align-items: flex-start; }
+.lesson-tile { position: relative; width: min(100%, 20rem); }
+.lesson-tile:hover { border-color: var(--color-text-secondary); }
+.lesson-tile-trigger { padding: var(--spacing-2) 0; border: 0; background: transparent; color: inherit; text-align: start; font-weight: 600; }
+.lesson-tile-trigger::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius-md); }
+.lesson-tile-trigger:focus-visible::after { outline: 2px solid currentColor; }
+.modal.lesson-replay { width: min(38rem, calc(100vw - 2rem)); padding: var(--spacing-5); }
+.lesson-replay .modal-heading { margin-bottom: var(--spacing-3); }
+.lesson-board {
+  --board-size: min(26rem, max(12rem, calc(100svh - 17rem)));
+  width: min(100%, var(--board-size));
+  margin-inline: auto;
+  padding: var(--spacing-6) var(--spacing-5) 0;
+  container-type: inline-size;
+}
+.lesson-replay .lesson-board .piece-face > span { font-size: clamp(.75rem, 5cqi, 1.75rem); }
+.lesson-count { font-variant-numeric: tabular-nums; min-inline-size: 5rem; text-align: center; }
+.lesson-comment { border-top: 1px solid var(--color-border); padding-top: var(--spacing-4); min-block-size: 5rem; }
+.lesson-replay .lesson-comment p { margin: 0; }
+.lesson-editor { width: min(100%, 66rem); margin: var(--spacing-6) auto 0; }
+.editor-workspace { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(15rem, .85fr); gap: var(--spacing-6); }
+.editor-board-panel, .editor-detail { min-width: 0; }
+.editor-board { --board-size: 30rem; }
+.editor-board .piece-face > span, .editor-setup-board .piece-face > span { font-size: clamp(.75rem, 5cqi, 1.75rem); }
+.editor-actions { flex-wrap: wrap; align-items: center; }
+.editor-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr)); gap: var(--spacing-3); }
+.editor-metadata { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+.editor-fields label { display: grid; gap: var(--spacing-1); }
+.editor-fields select, .editor-fields input[type="number"] {
+  width: 100%; min-height: 2.75rem; padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  background: var(--color-background-surface); color: var(--color-text-primary);
+}
+.editor-hand-settings { margin-top: var(--spacing-3); }
+.editor-hand-settings fieldset { min-width: 0; border: 1px solid var(--color-border); padding: var(--spacing-2); }
+.editor-hand-settings label { grid-template-columns: auto minmax(3rem, 1fr); align-items: center; margin-block: var(--spacing-1); }
+.editor-board-panel .hand-stand { max-width: 18rem; height: 4rem; aspect-ratio: auto; margin: 0; padding: var(--spacing-1) var(--spacing-2); }
+.editor-board-panel .hand-pieces { grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: 1fr; }
+.editor-board-panel .hand-piece .piece-face > span { font-size: clamp(.75rem, 4vw, 1.25rem); }
+.editor-board-panel .player-marker {
+  position: absolute; left: 100%; top: 50%; right: auto; bottom: auto;
+  transform: translateY(-50%); padding-inline-start: var(--spacing-1);
+}
+.editor-moves { list-style: none; margin: 0; padding: 0; max-height: 14rem; overflow: auto; border-block: 1px solid var(--color-border); }
+.editor-moves button { width: 100%; min-height: 2.75rem; border: 0; background: transparent; color: inherit; text-align: start; padding-inline: var(--spacing-3); }
+.editor-moves li + li { border-top: 1px solid var(--color-border); }
+.editor-moves button[aria-current], .editor-moves button:hover { background: var(--surface-hover); }
+.editor-moves button[aria-current] { font-weight: 600; }
+.modal.editor-setup { width: min(38rem, calc(100vw - 2rem)); padding: var(--spacing-5); }
+.editor-tile-board { container-type: inline-size; width: 100%; }
+.editor-tile-board .file-labels, .editor-tile-board .rank-labels { display: none; }
+.editor-tile-board .piece-face > span { font-size: clamp(.65rem, 5cqi, 1rem); }
+@media(max-width:46rem) {
+  .editor-workspace, .editor-metadata { grid-template-columns: minmax(0, 1fr); }
+}
 @media(max-width:640px) {
   .shogi-home { padding: 24px; }
   .shogi-home-content { width: min(100%,280px); }

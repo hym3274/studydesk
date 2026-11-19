@@ -38,6 +38,7 @@ export default function ShogiHome() {
     <Route path="online" element={<Online />} />
     <Route path="puzzles" element={<Study mode="puzzles" />} />
     <Route path="lessons" element={<Study mode="lessons" />} />
+    <Route path="lessons/editor" element={<Study mode="editor" />} />
     <Route path="*" element={<main className="not-found"><Link to="/tools/01">将棋へ</Link></main>} />
   </Routes></Suspense>;
 }

@@ -3,9 +3,10 @@ import { pieceLabel, playerName, squareLabel } from '../engine/game';
 import type { Color, Move, Position } from '../engine/types';
 import { Piece } from './Piece';
 
-export function Board({ position, flipped, selected, destinations, lastMove, checkedKing, onSquare, onCancel }: {
+export function Board({ position, flipped, selected, destinations, lastMove, checkedKing, onSquare, onCancel, readOnly = false }: {
   position: Position; flipped: boolean; selected: number | null; destinations: ReadonlySet<number>;
   lastMove?: Move; checkedKing: number | null; onSquare: (s: number) => void; onCancel: () => void;
+  readOnly?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null), [focused, setFocused] = useState(56);
   const topColor: Color = flipped ? 'sente' : 'gote';
@@ -25,12 +26,12 @@ export function Board({ position, flipped, selected, destinations, lastMove, che
   return <div className="board-shell">
     <div className="file-labels" aria-hidden="true">{(flipped ? '１２３４５６７８９' : '９８７６５４３２１').split('').map(x => <span key={x}>{x}</span>)}</div>
     <div className="rank-labels" aria-hidden="true">{(flipped ? '九八七六五四三二一' : '一二三四五六七八九').split('').map(x => <span key={x}>{x}</span>)}</div>
-    <div ref={ref} className="board" role="group" aria-label="将棋盤。矢印キーで移動、Enterで選択、Escapeで解除" onKeyDown={handleKey}>
+    <div ref={ref} className="board" role="group" aria-label={readOnly ? '将棋盤' : '将棋盤。矢印キーで移動、Enterで選択、Escapeで解除'} onKeyDown={readOnly ? undefined : handleKey}>
       {squares.map(s => {
         const p = position.board[s], legal = destinations.has(s), isSelected = selected === s;
         const last = lastMove?.to === s || lastMove?.type === 'move' && lastMove.from === s;
         const checked = checkedKing === s;
-        return <button key={s} type="button" data-square={s} tabIndex={focused === s ? 0 : -1}
+        return <button key={s} type="button" data-square={s} tabIndex={!readOnly && focused === s ? 0 : -1} disabled={readOnly}
           className={`square${isSelected ? ' selected' : ''}${legal ? ' legal' : ''}${last ? ' last-move' : ''}${checked ? ' checked' : ''}`}
           aria-label={`${squareLabel(s)} ${p ? `${playerName(p.color)}の${pieceLabel(p)}` : '空きマス'}${legal ? ' 移動可能' : ''}${checked ? ' 王手' : ''}`}
           aria-pressed={isSelected} onFocus={() => setFocused(s)} onClick={() => onSquare(s)}>

@@ -108,7 +108,11 @@ export default function ShogiGame({ initialSession, online }: { initialSession?:
     setPanel(null);
     void online?.send({ type: 'propose', kind });
   }
-  return <main className="shogi-app">
+  return <main className="shogi-app" onClick={event => {
+    if (!selection || promotion) return;
+    if (event.target instanceof Element && event.target.closest('.square, .hand-piece:not(:disabled)')) return;
+    setSelection(null);
+  }}>
     <header className="game-toolbar">
       <button className="menu-button" aria-label="メニューを開く" aria-haspopup="dialog" onClick={() => setPanel('menu')}>
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" /></svg>

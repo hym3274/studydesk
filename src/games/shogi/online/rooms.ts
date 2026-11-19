@@ -12,6 +12,7 @@ interface Room {
   order: Order;
   orderRevision: number;
   hostColor: Color | null;
+  started: boolean;
   game: Game;
   view: MatchGame;
   revision: number;
@@ -50,7 +51,7 @@ export class Rooms {
     const host = this.newPlayer();
     const game = newGame();
     const room: Room = {
-      code, host, order: 'random', orderRevision: 0, hostColor: null, game, view: game,
+      code, host, order: 'random', orderRevision: 0, hostColor: null, started: false, game, view: game,
       revision: 0, gameRevision: 0, activity: this.now(), proposal: null,
     };
     this.rooms.set(code, room);
@@ -69,6 +70,7 @@ export class Rooms {
     if (room.guest) throw new RoomError('この部屋は満員です', 409);
     if (room.host.left) throw new RoomError('この部屋は閉じられました', 410);
     room.guest = this.newPlayer();
+    room.hostColor = room.order === 'random' ? this.pickColor() : room.order;
     room.host.ready = false;
     room.revision++;
     room.activity = this.now();
@@ -82,11 +84,13 @@ export class Rooms {
   private snapshot(room: Room, player: Player, knownGame?: unknown): RoomSnapshot {
     const host = room.host === player;
     const opponent = host ? room.guest : room.host;
+    const assignedColor = room.hostColor && (host ? room.hostColor : other(room.hostColor));
     return {
       code: room.code, host, joined: !!opponent,
       opponentOnline: !!opponent && !opponent.left && this.now() - opponent.seen < ONLINE_WINDOW,
       ready: player.ready, opponentReady: opponent?.ready ?? false,
-      order: room.order, orderRevision: room.orderRevision, color: room.hostColor && (host ? room.hostColor : other(room.hostColor)),
+      order: room.order, orderRevision: room.orderRevision, assignedColor,
+      color: room.started ? assignedColor : null,
       revision: room.revision, gameRevision: room.gameRevision,
       ...(knownGame !== room.gameRevision && { game: room.view }),
       proposal: room.proposal && { kind: room.proposal.kind, mine: room.proposal.player === player },
@@ -97,7 +101,7 @@ export class Rooms {
     const room = this.find(code);
     const player = token === room.host.token ? room.host : token === room.guest?.token ? room.guest : undefined;
     if (!player || player.left) throw new RoomError('この部屋の参加情報が無効です', 403);
-    if (!room.hostColor) {
+    if (!room.started) {
       for (const seat of [room.host, room.guest]) {
         if (seat?.ready && this.now() - seat.seen >= ONLINE_WINDOW) {
           seat.ready = false;
@@ -118,12 +122,13 @@ export class Rooms {
   private apply(room: Room, player: Player, command: Record<string, unknown>) {
     if (command.type === 'leave') {
       player.left = true;
-      if (!room.hostColor && player === room.guest) {
+      if (!room.started && player === room.guest) {
         room.guest = undefined;
+        room.hostColor = null;
         room.host.ready = false;
         room.orderRevision++;
-      } else if (!room.hostColor) this.rooms.delete(room.code);
-      else if (!room.game.result) this.updateGame(room, resign(room.game, player === room.host ? room.hostColor : other(room.hostColor)));
+      } else if (!room.started) this.rooms.delete(room.code);
+      else if (!room.game.result && room.hostColor) this.updateGame(room, resign(room.game, player === room.host ? room.hostColor : other(room.hostColor)));
       return;
     }
     const host = player === room.host;
@@ -134,13 +139,13 @@ export class Rooms {
       return;
     }
     if (!opponent || opponent.left) throw new RoomError('相手が部屋にいません', 409);
-    if (!room.hostColor) {
+    if (!room.started || !room.hostColor) {
       if (command.type === 'order') throw new RoomError('先後を指定できるのは相手が入室する前です', 409);
       if (command.type === 'ready' && typeof command.ready === 'boolean') {
         if (command.orderRevision !== room.orderRevision) throw new RoomError('先後設定が変わりました。確認してから準備してください', 409);
         player.ready = command.ready;
         if (player.ready && opponent.ready && this.now() - opponent.seen < ONLINE_WINDOW) {
-          room.hostColor = room.order === 'random' ? this.pickColor() : room.order;
+          room.started = true;
         }
         return;
       }

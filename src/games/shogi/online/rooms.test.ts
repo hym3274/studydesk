@@ -18,10 +18,13 @@ function setup(rooms = new Rooms()) {
 }
 
 describe('将棋の通信対戦', () => {
-  it('同時に準備しても、サーバーが一度だけランダムに先後を割り当てる', () => {
+  it('入室時にランダムで先後を割り当て、両者の準備が揃ったときに開始する', () => {
     let draws = 0;
     const { host, guest, send, read } = setup(new Rooms(undefined, () => { draws++; return 'gote'; }));
     const initial = read(host);
+    expect(initial).toMatchObject({ assignedColor: 'gote', color: null });
+    expect(read(guest)).toMatchObject({ assignedColor: 'sente', color: null });
+    expect(draws).toBe(1);
     const command = { type: 'ready', ready: true, orderRevision: initial.orderRevision } as const;
     expect(send(host, command, initial.revision)).toMatchObject({ ready: true, opponentReady: false, color: null });
     expect(send(guest, command, initial.revision)).toMatchObject({ ready: true, opponentReady: true, color: 'sente' });
@@ -34,7 +37,8 @@ describe('将棋の通信対戦', () => {
     const { seat: host, room: initial } = rooms.create();
     const ordered = rooms.contact(host.code, host.token, undefined, { type: 'order', order: 'gote' }, initial.revision);
     const { seat: guest, room: joined } = rooms.join(host.code);
-    expect(joined).toMatchObject({ ready: false, opponentReady: false, order: 'gote' });
+    expect(joined).toMatchObject({ ready: false, opponentReady: false, order: 'gote', assignedColor: 'sente', color: null });
+    expect(rooms.contact(host.code, host.token, undefined)).toMatchObject({ assignedColor: 'gote', color: null });
     for (const player of [host, guest]) {
       expect(() => rooms.contact(player.code, player.token, undefined, { type: 'order', order: 'sente' }, joined.revision)).toThrow(/入室する前/);
     }
@@ -42,6 +46,17 @@ describe('将棋の通信対戦', () => {
     const ready = { type: 'ready', ready: true, orderRevision: ordered.orderRevision };
     rooms.contact(host.code, host.token, undefined, ready);
     expect(rooms.contact(guest.code, guest.token, undefined, ready).color).toBe('sente');
+  });
+
+  it('準備中に相手が退出すると割り当てを解除し、次の相手が入室できる', () => {
+    const rooms = new Rooms();
+    const { host, guest, read, send, ready } = setup(rooms);
+    ready(host);
+    send(guest, { type: 'leave' });
+    expect(read(host)).toMatchObject({ joined: false, assignedColor: null, color: null, ready: false });
+    const { room } = rooms.join(host.code);
+    expect(room.assignedColor).not.toBeNull();
+    expect(room.game?.result).toBeNull();
   });
 
   it('無効な着手と再送を拒否し、確定した局面を両端末に返す', () => {

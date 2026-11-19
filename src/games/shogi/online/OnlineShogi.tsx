@@ -8,7 +8,6 @@ import { TextInput } from '@astryxdesign/core/TextInput';
 import { VStack } from '@astryxdesign/core/VStack';
 import { ExperimentUI } from '../../../ui/ExperimentUI';
 import { newGame, playerName } from '../engine/game';
-import { other } from '../engine/types';
 import ShogiGame from '../ShogiGame';
 import { ROOM_CODE, type Order } from './protocol';
 import { roomEndpoint, useRoom } from './useRoom';
@@ -27,7 +26,8 @@ export default function OnlineShogi() {
   const started = !!room?.color;
   const active = started && revealed;
   const order = room?.order ?? 'random';
-  const previewColor = order === 'random' ? 'sente' : room?.host ? order : other(order);
+  const assignedColor = room?.assignedColor;
+  const previewColor = assignedColor ?? (order === 'gote' ? 'gote' : 'sente');
   const canAct = connected && !busy && !!room?.opponentOnline;
 
   useEffect(() => {
@@ -104,9 +104,9 @@ export default function OnlineShogi() {
                   </VStack>
                   <p className="online-message" role="status">{connected ? '相手の参加を待っています' : '再接続中…'}</p>
                 </> : <>
-                  <Heading level={1} className="online-player-order">あなたは {order === 'random' ? 'ランダム' : playerName(previewColor)} です！</Heading>
+                  <Heading level={1} className="online-player-order">{assignedColor ? `あなたは${assignedColor === 'sente' ? '先行' : '後攻'}ですよ！` : '先後を確認中…'}</Heading>
                   <Button label={room.ready ? '準備おｋ！' : '準備おｋ？'} variant="primary" size="lg" width="100%"
-                    className={room.ready ? 'online-ready-confirmed' : undefined} isDisabled={!canAct}
+                    className={room.ready ? 'online-ready-confirmed' : undefined} isDisabled={!canAct || !assignedColor}
                     onClick={() => void send({ type: 'ready', ready: !room.ready, orderRevision: room.orderRevision })} />
                   {(!connected || !room.opponentOnline) && <p className="online-message" role="status">{connected ? '相手の再接続を待ってます' : '再接続中…'}</p>}
                 </>}

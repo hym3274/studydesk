@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
 import { Button } from '@astryxdesign/core/Button';
 import { Heading } from '@astryxdesign/core/Heading';
 import { HStack } from '@astryxdesign/core/HStack';
@@ -7,20 +7,36 @@ import { Text } from '@astryxdesign/core/Text';
 import { SegmentedControl, SegmentedControlItem } from '@astryxdesign/core/SegmentedControl';
 import { ExperimentUI } from '../../ui/ExperimentUI';
 import { Board } from './components/Board';
+import BoardThumbnail from './components/BoardThumbnail';
 import { HandStand } from './components/HandStand';
 import { Modal } from '../../components/Modal';
 import { Piece } from './components/Piece';
 import { getLegalMoves, hasLegalMove, isInCheck, playMove } from './engine/rules';
 import { type HandKind, type Move } from './engine/types';
 import { puzzles } from './study-data';
+import { LessonReplay } from './LessonReplay';
+import { LessonTile } from './LessonTile';
+import { previewLesson } from './lesson-data';
+import { EDITOR_PATH } from './lesson-draft';
 import './shogi.css';
 import './study.css';
 
-export default function Study({ mode }: { mode: 'puzzles' | 'lessons' }) {
+const LessonEditor = lazy(() => import('./LessonEditor'));
+
+export default function Study({ mode }: { mode: 'puzzles' | 'lessons' | 'editor' }) {
+  const title = mode === 'puzzles' ? '詰将棋' : mode === 'lessons' ? '戦法解説' : '解説エディター';
   return <ExperimentUI><main className="shogi-app study-page experiment-study"><header className="experiment-study-header">
-    <Button href="/tools/01" label="将棋へ" variant="ghost" />
-    <Heading level={1}>{mode === 'puzzles' ? '詰将棋' : '戦法解説'}</Heading>
-  </header>{mode === 'lessons' ? <VStack className="experiment-pending" hAlign="center"><Text type="supporting">準備中</Text></VStack> : <PuzzleCollection />}</main></ExperimentUI>;
+    <Button href={mode === 'editor' ? '/tools/01/lessons' : '/tools/01'} label={mode === 'editor' ? '戦法解説へ' : '将棋へ'} variant="ghost" />
+    <Heading level={1}>{title}</Heading>
+  </header>{mode === 'editor' ? <LessonEditor /> : mode === 'lessons' ? <LessonPreview /> : <PuzzleCollection />}</main></ExperimentUI>;
+}
+function LessonPreview() {
+  const [open, setOpen] = useState(false);
+  return <VStack className="lesson-catalog" gap={4}>
+    <Button href={EDITOR_PATH} label="エディターを開く" />
+    <LessonTile title="矢倉囲い" genre="囲い" thumbnail={<BoardThumbnail label="矢倉囲いの盤面" />} onOpen={() => setOpen(true)} />
+    {open && <LessonReplay lesson={previewLesson} onClose={() => setOpen(false)} />}
+  </VStack>;
 }
 function PuzzleCollection() {
   const [index, setIndex] = useState(0);

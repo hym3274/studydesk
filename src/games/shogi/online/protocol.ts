@@ -27,6 +27,8 @@ export interface RoomSnapshot {
   opponentReady: boolean;
   order: Order;
   orderRevision: number;
+  assignedColor: Color | null;
+  /** Becomes available when the match starts, for existing downloaded clients. */
   color: Color | null;
   revision: number;
   gameRevision: number;
